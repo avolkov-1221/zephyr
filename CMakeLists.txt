@@ -1299,10 +1299,17 @@ if(CONFIG_GEN_ISR_TABLES)
 
   # isr_tables.c is generated from ${ZEPHYR_LINK_STAGE_EXECUTABLE} by
   # gen_isr_tables.py
+  if(CONFIG_CUSTOM_GEN_ISR_TABLES)
+    list(APPEND GEN_ISR_TABLE_EXTRA_ARG ${CONFIG_CUSTOM_GEN_ISR_TABLES_ARGS})
+    set(GEN_ISR_TABLES_PATH ${CONFIG_CUSTOM_GEN_ISR_TABLES_PATH})
+  else()
+    set(GEN_ISR_TABLES_PATH ${ZEPHYR_BASE}/scripts/build/gen_isr_tables.py)
+  endif()
+
   add_custom_command(
     OUTPUT isr_tables.c isr_tables_vt.ld isr_tables_swi.ld
     COMMAND ${PYTHON_EXECUTABLE}
-    ${ZEPHYR_BASE}/scripts/build/gen_isr_tables.py
+    ${GEN_ISR_TABLES_PATH}
     --output-source isr_tables.c
     --linker-output-files isr_tables_vt.ld isr_tables_swi.ld
     --kernel $<TARGET_FILE:${ZEPHYR_LINK_STAGE_EXECUTABLE}>

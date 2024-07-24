@@ -10,5 +10,19 @@ config SOC_SERIES_RA2
 	select HAS_PM
 	select PLATFORM_SPECIFIC_INIT
 	select CLOCK_CONTROL
+	select CUSTOM_GEN_ISR_TABLES
 	help
 	  Enable support for Renesas RA2 MCU series
+
+if SOC_SERIES_RA2
+config CUSTOM_GEN_ISR_TABLES
+	bool
+
+config CUSTOM_GEN_ISR_TABLES_PATH
+	string
+	default "${ZEPHYR_BASE}/soc/renesas/ra/ra2/scripts/gen_isr_tables.py"
+
+config CUSTOM_GEN_ISR_TABLES_ARGS
+	string
+	default "--renesas-icu --debug"
+endif
